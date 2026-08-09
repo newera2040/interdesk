@@ -1,0 +1,147 @@
+{
+  "version": 1,
+  "verified": "2026-08-03",
+  "note": "One canonical taxonomy, read by tools/poller.py (from disk) and js/fatopics.js (same-origin fetch). Matching: normalise text (lowercase, fold macrons a-e-i-o-u, strip okina/apostrophes, collapse whitespace, strip possessive 's). Plain seeds match word-boundary (single word) or substring (multiword) on the NORMALISED text. 'cased' seeds match case-sensitively with word boundaries on the RAW text (kills 'sis'/'un' false positives). 'compounds' are [a,b] pairs requiring both. Score = title-hits*2 + summary-hits*1 (first 300 chars), tag at score >= 2, max 4 tags by score; alwaysKeep tags never dropped by the cap. Leader surnames verified 3 Aug 2026 — Pacific governments turn over fast; re-verify after any no-confidence vote.",
+  "scoring": {
+    "title": 2,
+    "summary": 1,
+    "threshold": 2,
+    "maxTags": 4,
+    "alwaysKeep": ["principal-mentions", "crisis-watch"],
+    "summaryChars": 300
+  },
+  "nzScope": {
+    "note": "The wire's foreign-news scope: foreign items must be significant to, related to, or concern New Zealand and its interests. Items with region nz/official/pacific always pass; global and analysis items pass only with a topic tag, a tracked counterpart or leader, or one of these NZ-nexus tokens (matched like plain seeds on normalised title+summary). Enforced by tools/poller.py at bake and Fatopics.inScope on-device.",
+    "tokens": ["new zealand", "aotearoa", "nz", "nzdf", "mfat", "beehive", "kiwi", "kiwis", "anzac", "trans-tasman", "pacific islands", "pacific island", "south pacific", "pacific islands forum", "apec"]
+  },
+  "topics": [
+    {
+      "id": "nz-govt-moves",
+      "label": "NZ Govt moves",
+      "seeds": ["winston peters", "mfat", "ministry of foreign affairs", "foreign minister", "todd mcclay", "trade minister", "chris penk", "defence minister", "judith collins", "beehive", "nzdf deployment", "aid programme", "official development assistance", "nz embassy", "high commission", "diplomatic"],
+      "compounds": [["luxon", "summit"], ["luxon", "visit"], ["luxon", "leaders"], ["luxon", "foreign"]],
+      "cased": [],
+      "require": null
+    },
+    {
+      "id": "pacific-region",
+      "label": "Pacific",
+      "seeds": ["fiji", "samoa", "tonga", "vanuatu", "papua new guinea", "solomon islands", "cook islands", "niue", "tokelau", "kiribati", "tuvalu", "nauru", "palau", "marshall islands", "micronesia", "new caledonia", "french polynesia", "bougainville", "west papua", "timor-leste", "pitcairn",
+        "suva", "apia", "nukualofa", "port vila", "port moresby", "honiara", "rarotonga", "avarua", "tarawa", "funafuti", "majuro", "noumea", "papeete", "palikir", "koror",
+        "rabuka", "laauli", "fakafanua", "napat", "marape", "mark brown", "maamau", "feleti teo", "adeang", "whipps", "hilda heine", "simina", "tukumuli",
+        "pacific islands forum", "forum secretariat", "melanesian spearhead", "pacer plus", "blue pacific", "boe declaration", "falepili", "aid budget", "labour mobility", "rse scheme"],
+      "compounds": [["png", "pacific"], ["png", "moresby"], ["wale", "solomon"], ["schmidt", "samoa"], ["guam", "pacific"]],
+      "cased": ["PIF", "PNG"],
+      "require": null
+    },
+    {
+      "id": "china-indopacific",
+      "label": "China & Indo-Pacific",
+      "seeds": ["china", "beijing", "xi jinping", "chinese communist party", "belt and road", "taiwan", "taipei", "taiwan strait", "south china sea", "east china sea", "pla navy", "chinese navy", "wang yi", "chinese embassy", "confucius institute", "huawei", "indo-pacific", "indo pacific", "first island chain", "grey zone", "gray zone", "united front", "chinese", "pla", "hong kong", "xinjiang", "undersea cable", "subsea cable", "submarine cable", "indonesia", "jakarta", "asean", "southeast asia", "south-east asia", "philippines", "vietnam", "myanmar", "pakistan", "kashmir", "south asia"],
+      "compounds": [["prc", "china"], ["research vessel", "chinese"], ["dual-use", "china"]],
+      "cased": [],
+      "require": null
+    },
+    {
+      "id": "us-allies",
+      "label": "US & allies",
+      "seeds": ["united states", "washington", "white house", "state department", "pentagon", "secretary of state", "rubio", "trump", "australia", "canberra", "albanese", "penny wong", "dfat", "quad", "japan", "tokyo", "south korea", "seoul", "india", "new delhi", "modi", "united kingdom", "britain", "burnham", "nato", "european union", "brussels"],
+      "compounds": [],
+      "cased": ["EU", "UK", "US"],
+      "require": null
+    },
+    {
+      "id": "aukus-defence",
+      "label": "AUKUS & defence",
+      "seeds": ["aukus", "pillar two", "pillar 2", "nuclear submarine", "nuclear-powered", "defence capability plan", "defence spending", "defence review", "frigate", "anzac frigate", "poseidon", "p-8", "nzdf", "defence force", "interoperability", "joint exercise", "military exercise", "rimpac", "talisman sabre", "hypersonic", "defence budget", "two percent"],
+      "compounds": [["missile", "defence"], ["drone", "military"]],
+      "cased": [],
+      "require": null
+    },
+    {
+      "id": "intelligence",
+      "label": "Intelligence",
+      "seeds": ["nzsis", "gcsb", "five eyes", "security intelligence service", "communications security bureau", "espionage", "spy", "foreign interference", "intelligence community", "threat assessment", "surveillance", "ncsc", "cyber attack", "cyberattack", "inspector-general of intelligence", "igis", "intelligence and security committee", "declassified"],
+      "compounds": [["warrant", "intelligence"], ["hampton", "nzsis"], ["andrew clark", "gcsb"]],
+      "cased": ["SIS"],
+      "require": null
+    },
+    {
+      "id": "trade-economy",
+      "label": "Trade",
+      "seeds": ["free trade", "fta", "trade agreement", "cptpp", "rcep", "pacer plus", "tariff", "market access", "trade mission", "dairy exports", "fonterra", "india fta", "trade sanctions", "economic security", "supply chain", "critical minerals", "cepa", "wto", "strait of hormuz", "shipping lane", "shipping lanes", "red sea", "export controls"],
+      "compounds": [["export", "trade"], ["gcc", "trade"], ["uae", "trade"], ["meat", "export"]],
+      "cased": ["WTO"],
+      "require": null
+    },
+    {
+      "id": "multilateral-law",
+      "label": "International law",
+      "seeds": ["united nations", "security council", "general assembly", "unga", "international court of justice", "international criminal court", "itlos", "genocide convention", "geneva convention", "international law", "rules-based order", "rules based order", "human rights council", "special rapporteur", "refugee convention", "unclos", "law of the sea", "advisory opinion", "war crimes", "crimes against humanity", "international humanitarian law", "ratification", "accession", "veto", "sanctions", "nuclear weapons", "nuclear-capable", "non-proliferation", "nonproliferation", "disarmament", "npt", "test ban"],
+      "compounds": [["treaty", "international"], ["resolution", "council"], ["sanctions", "regime"], ["arbitration", "international"]],
+      "cased": ["UN", "ICJ", "ICC"],
+      "require": null
+    },
+    {
+      "id": "climate-pacific",
+      "label": "Climate (Pacific)",
+      "seeds": ["climate change", "sea level", "sea-level rise", "loss and damage", "climate finance", "green climate fund", "adaptation", "climate migration", "cop31", "fossil fuel treaty", "1.5 degrees", "king tide", "atoll", "coastal inundation", "climate statement", "climate mobility"],
+      "compounds": [["relocation", "climate"], ["cyclone", "recovery"]],
+      "cased": ["COP31"],
+      "require": "pacific-region"
+    },
+    {
+      "id": "immigration-consular",
+      "label": "Consular",
+      "seeds": ["recognised seasonal employer", "rse", "pacific access category", "samoan quota", "consular", "evacuation", "deportation", "501 deportee", "dual citizen", "detained overseas", "hostage", "travel advisory", "safetravel", "repatriation"],
+      "compounds": [["visa", "pacific"], ["visa", "diploma"], ["passport", "consular"]],
+      "cased": [],
+      "require": null
+    },
+    {
+      "id": "principal-mentions",
+      "label": "Principals",
+      "seeds": ["vanushi walters"],
+      "compounds": [["walters", "labour"], ["walters", "foreign affairs"], ["walters", "spokesperson"], ["walters", "mp"], ["twyford", "labour"], ["oconnor", "defence"], ["oconnor", "trade"]],
+      "cased": [],
+      "require": null
+    },
+    {
+      "id": "crisis-watch",
+      "label": "Crisis watch",
+      "seeds": ["coup", "martial law", "state of emergency", "unrest", "riot", "crackdown", "ceasefire", "airstrike", "air strike", "invasion", "offensive", "escalation", "mobilisation", "junta", "assassination", "civil war", "earthquake", "tsunami", "eruption", "humanitarian crisis", "famine", "outbreak", "mass evacuation", "motion of no confidence", "no-confidence", "ukraine", "ukrainian", "kyiv", "russia", "russian", "moscow", "kremlin", "gaza", "israel", "israeli", "palestinian", "west bank", "hamas", "hezbollah", "iran", "tehran", "north korea", "pyongyang", "missile", "drone strike", "drone attack", "air defence", "air defense", "interceptor", "shelling", "counteroffensive", "occupation", "occupied", "annexation", "warfare"],
+      "compounds": [["cyclone", "warning"], ["cyclone", "hits"], ["evacuation", "ordered"]],
+      "cased": [],
+      "require": null
+    }
+  ],
+  "sourceTags": {
+    "bh-fa": ["nz-govt-moves"],
+    "bh-defence": ["nz-govt-moves", "aukus-defence"],
+    "bh-trade": ["nz-govt-moves", "trade-economy"],
+    "bh-natsec": ["nz-govt-moves", "intelligence"],
+    "bh-peters": ["nz-govt-moves"],
+    "bh-penk": ["nz-govt-moves"],
+    "bh-mcclay": ["nz-govt-moves"],
+    "bh-pacific": ["nz-govt-moves"],
+    "bh-immigration": ["nz-govt-moves", "immigration-consular"],
+    "bh-all": ["nz-govt-moves"],
+    "gn-mfat": ["nz-govt-moves"],
+    "gn-nzdf": ["aukus-defence"],
+    "gn-walters": ["principal-mentions"],
+    "gn-peters": ["nz-govt-moves"],
+    "gn-aukus": ["aukus-defence"],
+    "gn-pif": ["pacific-region"],
+    "gn-china-pacific": ["china-indopacific", "pacific-region"],
+    "gn-intel": ["intelligence"],
+    "gn-trade": ["trade-economy"],
+    "gn-fadtc": ["nz-govt-moves"],
+    "forumsec": ["pacific-region"],
+    "sprep": ["pacific-region"],
+    "spc": ["pacific-region"],
+    "un-asiapacific": ["multilateral-law"],
+    "un-news": ["multilateral-law"],
+    "wto-news": ["trade-economy", "multilateral-law"],
+    "gn-china-mfa": ["china-indopacific"]
+  }
+}

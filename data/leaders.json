@@ -1,0 +1,576 @@
+{
+  "schema": 1,
+  "verified": "2026-08-03",
+  "reviewNote": "Leaders verified 3 Aug 2026 (Burnham UK PM since 20 Jul 2026 — do not cite Starmer; Trump/Vance, Albanese, Modi and Putin re-confirmed against 2026 sources). Elections and successions happen: re-verify each holder whenever a scope=self spike suggests trouble at home.",
+  "note": "World-leaders tracker. The poller synthesises one Google News query feed per leader (kind gnews, stream 'leaders') AND runs the name rules below over every corpus item, so leader files include coverage from the direct feeds (RNZ, BBC, Al Jazeera...) as well as query-net catches. Every leader item gets exactly ONE scope: 'globe' (what they're doing to the world), 'country' (what they're doing at home), 'self' (what's happening to them — polls, courts, health, party). Scope scoring: seed hits, title x2 + summary x1, highest wins; precedence self > globe > country on ties; no hits = country. Globe detection is leader-relative: mentions of places FOREIGN to the leader's homeTokens (other leaders' homes, the places list, or a second tracked leader) score globe; their own country's institutions score country.",
+  "scopes": {
+    "globe": {
+      "label": "The globe",
+      "seeds": [
+        "summit",
+        "treaty",
+        "sanctions",
+        "tariff",
+        "tariffs",
+        "trade deal",
+        "trade war",
+        "trade talks",
+        "alliance",
+        "nato",
+        "united nations",
+        "security council",
+        "foreign minister",
+        "foreign policy",
+        "state visit",
+        "visit",
+        "visits",
+        "bilateral",
+        "trilateral",
+        "ceasefire",
+        "war",
+        "peace talks",
+        "peace plan",
+        "nuclear",
+        "missile",
+        "military exercise",
+        "troops",
+        "invasion",
+        "airstrike",
+        "annex",
+        "diplomatic",
+        "diplomacy",
+        "ambassador",
+        "embassy",
+        "export controls",
+        "aid package",
+        "arms deal",
+        "arms control",
+        "talks",
+        "negotiations",
+        "ultimatum",
+        "belt and road",
+        "brics",
+        "g7",
+        "g20",
+        "apec",
+        "asean",
+        "indo-pacific",
+        "south china sea",
+        "middle east"
+      ],
+      "compounds": [
+        [
+          "deal",
+          "with"
+        ],
+        [
+          "meets",
+          "leader"
+        ]
+      ],
+      "places": [
+        "iran",
+        "israel",
+        "gaza",
+        "ukraine",
+        "taiwan",
+        "north korea",
+        "south korea",
+        "japan",
+        "europe",
+        "african",
+        "africa",
+        "venezuela",
+        "mexico",
+        "canada",
+        "brazil",
+        "pacific islands",
+        "philippines",
+        "vietnam",
+        "indonesia",
+        "saudi",
+        "türkiye",
+        "turkey",
+        "germany",
+        "france",
+        "poland",
+        "baltic",
+        "greenland",
+        "panama",
+        "syria",
+        "lebanon",
+        "yemen",
+        "pakistan",
+        "afghanistan",
+        "uzbek",
+        "kazakh",
+        "belarus",
+        "new zealand"
+      ]
+    },
+    "country": {
+      "label": "Their country",
+      "seeds": [
+        "economy",
+        "inflation",
+        "budget",
+        "parliament",
+        "congress",
+        "senate",
+        "legislation",
+        "bill",
+        "law",
+        "reform",
+        "tax",
+        "healthcare",
+        "housing",
+        "immigration",
+        "border",
+        "police",
+        "crime",
+        "strike",
+        "protest",
+        "protests",
+        "unemployment",
+        "wages",
+        "energy",
+        "infrastructure",
+        "education",
+        "pension",
+        "welfare",
+        "domestic",
+        "cabinet",
+        "minister",
+        "governor",
+        "state of the union",
+        "address to the nation",
+        "national"
+      ],
+      "compounds": []
+    },
+    "self": {
+      "label": "Themselves",
+      "seeds": [
+        "approval rating",
+        "poll",
+        "polls",
+        "polling",
+        "scandal",
+        "impeachment",
+        "indicted",
+        "indictment",
+        "court case",
+        "trial",
+        "lawsuit",
+        "investigation",
+        "corruption",
+        "resign",
+        "resignation",
+        "leadership challenge",
+        "leadership contest",
+        "no-confidence",
+        "no confidence",
+        "reshuffle",
+        "health scare",
+        "hospitalised",
+        "hospitalized",
+        "surgery",
+        "biography",
+        "memoir",
+        "family",
+        "son",
+        "daughter",
+        "wife",
+        "husband",
+        "personal",
+        "legacy",
+        "successor",
+        "succession",
+        "re-election bid",
+        "reelection bid",
+        "campaign trail",
+        "party conference",
+        "primary challenge",
+        "cognitive",
+        "age question"
+      ],
+      "compounds": [
+        [
+          "his",
+          "future"
+        ],
+        [
+          "her",
+          "future"
+        ]
+      ]
+    }
+  },
+  "leaders": [
+    {
+      "id": "trump",
+      "name": "Donald Trump",
+      "country": "United States",
+      "role": "President",
+      "party": "",
+      "colour": "#b34a4a",
+      "query": "\"Donald Trump\" OR \"President Trump\" when:2d",
+      "strongNames": [
+        "donald trump",
+        "president trump"
+      ],
+      "weakSurname": "trump",
+      "weakContext": [
+        "white house",
+        "president",
+        "washington",
+        "administration",
+        "maga",
+        "oval office"
+      ],
+      "verifiedAt": "2026-08-03",
+      "note": "The alliance-and-tariff variable in every NZ trade and security question; her 'challenge of trusting Trump' file.",
+      "homeTokens": [
+        "united states",
+        "america",
+        "american",
+        "washington",
+        "white house",
+        "congress",
+        "senate",
+        "us "
+      ],
+      "socials": [
+        {
+          "platform": "truth",
+          "handle": "@realDonaldTrump",
+          "url": "https://truthsocial.com/@realDonaldTrump",
+          "activity": "high",
+          "evidence": "NPR's May 2026 analysis counted ~19 posts/day in early 2026, and Aug 2026 NPR/CNBC coverage of Truth Social's paid early-access feed treats his account as the market-moving source",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "x",
+          "handle": "@realDonaldTrump",
+          "url": "https://x.com/realDonaldTrump",
+          "activity": "low",
+          "evidence": "Account widely cited by news orgs (NBC covered his return post); NPR May 2026 notes he posts almost exclusively on Truth Social, with only occasional X posts (latest found dated May 2026)",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "instagram",
+          "handle": "@realdonaldtrump",
+          "url": "https://www.instagram.com/realdonaldtrump/",
+          "activity": "medium",
+          "evidence": "Profile billed '45th & 47th President of the United States'; Social Blade/HypeAuditor trackers show ~44M followers with new posts continuing through July 2026",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "facebook",
+          "handle": "DonaldTrump",
+          "url": "https://www.facebook.com/DonaldTrump/",
+          "activity": "medium",
+          "evidence": "Fortune covered his 2023 reinstatement and return to posting; page shows 42.4M likes and ~486k 'people talking about this', indicating ongoing cross-posted activity",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "tiktok",
+          "handle": "@realdonaldtrump",
+          "url": "https://www.tiktok.com/@realdonaldtrump",
+          "activity": "low",
+          "evidence": "CNBC and Snopes (July 2026) cite it as his official account with 16.7M followers but only 77 videos in total, so posting is sporadic",
+          "verifiedAt": "2026-08-04"
+        }
+      ],
+      "socialsNote": "Lives on Truth Social, posting many times daily and breaking policy news there first (TMTG now even sells early access to his Truths); X, Instagram and Facebook are secondary, largely cross-posted channels, and TikTok is occasional despite a big following.",
+      "code": "US"
+    },
+    {
+      "id": "xi",
+      "name": "Xi Jinping",
+      "country": "China",
+      "role": "President / CCP General Secretary",
+      "party": "",
+      "colour": "#c04343",
+      "query": "\"Xi Jinping\" when:2d",
+      "strongNames": [
+        "xi jinping",
+        "president xi"
+      ],
+      "weakSurname": null,
+      "weakContext": [],
+      "verifiedAt": "2026-08-03",
+      "note": "The other pole of NZ's strategic balance; Pacific competition runs through Beijing. Surname too short for weak matching — full name only.",
+      "homeTokens": [
+        "china",
+        "chinese",
+        "beijing",
+        "prc"
+      ],
+      "socials": [
+        {
+          "platform": "official",
+          "handle": "fmprc.gov.cn (MFA English)",
+          "url": "https://www.fmprc.gov.cn/mfa_eng/",
+          "activity": "high",
+          "evidence": "Ministry of Foreign Affairs English site carries Xi's speeches, statements and press appearances (e.g. May 2026 Xi-Putin joint press meeting) and is updated daily",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "official",
+          "handle": "english.news.cn (Xinhua English)",
+          "url": "https://english.news.cn/",
+          "activity": "high",
+          "evidence": "State news agency's English site publishes near-daily Xi coverage and full speech texts, with 2026-dated pages verified through July 2026",
+          "verifiedAt": "2026-08-04"
+        }
+      ],
+      "socialsNote": "Has no personal social media accounts on any platform (fact-checkers confirm circulating X/Facebook handles are fake or parody); his statements live on state channels, chiefly the MFA English site and Xinhua/China Daily's Xi coverage.",
+      "code": "CN"
+    },
+    {
+      "id": "albanese",
+      "name": "Anthony Albanese",
+      "country": "Australia",
+      "role": "Prime Minister",
+      "party": "",
+      "colour": "#3f7a5f",
+      "query": "Albanese when:2d",
+      "strongNames": [
+        "anthony albanese"
+      ],
+      "weakSurname": "albanese",
+      "weakContext": [
+        "australia",
+        "canberra",
+        "prime minister",
+        "aukus",
+        "pacific"
+      ],
+      "verifiedAt": "2026-08-03",
+      "note": "The only-ally file: what Canberra does, Wellington answers for. July 2026 Pacific tour confirmed him active in her region.",
+      "homeTokens": [
+        "australia",
+        "australian",
+        "canberra"
+      ],
+      "socials": [
+        {
+          "platform": "x",
+          "handle": "@AlboMP",
+          "url": "https://x.com/AlboMP",
+          "activity": "high",
+          "evidence": "Linked from anthonyalbanese.com.au; live profile check 6 Aug 2026 shows 1.4m followers, PM bio, posts on 28-29 Jul and 1 Aug",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "instagram",
+          "handle": "@albomp",
+          "url": "https://www.instagram.com/albomp/",
+          "activity": "high",
+          "evidence": "Linked from anthonyalbanese.com.au; profile check shows 672K followers and daily posts 1-5 Aug 2026",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "facebook",
+          "handle": "Anthony Albanese (/AlboMP)",
+          "url": "https://www.facebook.com/AlboMP",
+          "activity": "high",
+          "evidence": "Linked from anthonyalbanese.com.au; live page check shows 748K followers, authorised-by-ALP bio, latest post 6 hours old",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "tiktok",
+          "handle": "@albomp",
+          "url": "https://www.tiktok.com/@albomp",
+          "activity": "medium",
+          "evidence": "Cited in press (Pedestrian.tv, LBBOnline) with videos linked from the account into 2026; 133.5K followers; direct check blocked by CAPTCHA so recent frequency is press-based",
+          "verifiedAt": "2026-08-04"
+        }
+      ],
+      "socialsNote": "X @AlboMP (1.4m) is the flagship, but Instagram and Facebook now carry near-daily video/carousel content; TikTok is a smaller campaign-era channel his team still uses.",
+      "code": "AU"
+    },
+    {
+      "id": "burnham",
+      "name": "Andy Burnham",
+      "country": "United Kingdom",
+      "role": "Prime Minister",
+      "party": "",
+      "colour": "#5f6fa8",
+      "query": "\"Andy Burnham\" when:2d",
+      "strongNames": [
+        "andy burnham"
+      ],
+      "weakSurname": "burnham",
+      "weakContext": [
+        "prime minister",
+        "downing street",
+        "britain",
+        "uk pm",
+        "labour government"
+      ],
+      "verifiedAt": "2026-08-03",
+      "note": "PM since 20 Jul 2026 (Starmer resigned) — a new UK government mid-CPTPP, mid-AUKUS. Never cite Starmer as current.",
+      "homeTokens": [
+        "britain",
+        "british",
+        "united kingdom",
+        "uk ",
+        "london",
+        "england",
+        "downing street",
+        "westminster"
+      ],
+      "socials": [
+        {
+          "platform": "x",
+          "handle": "@andyburnham",
+          "url": "https://x.com/andyburnham",
+          "activity": "high",
+          "evidence": "Linked from official site andyburnham.org.uk; profile joined May 2010 (his renamed original account), 729.4k followers, PM bio, posts daily 1-4 Aug, and Reuters coverage cites ~5m views on one X video",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "instagram",
+          "handle": "@andy.burnham",
+          "url": "https://www.instagram.com/andy.burnham/",
+          "activity": "high",
+          "evidence": "Linked from andyburnham.org.uk; 639K followers with PM bio, and Reuters/The Week report his Instagram videos drew millions of views in his first fortnight",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "facebook",
+          "handle": "Andy Burnham for Makerfield (page id 61589858954972)",
+          "url": "https://www.facebook.com/profile.php?id=61589858954972",
+          "activity": "medium",
+          "evidence": "Linked from andyburnham.org.uk; live check shows page bio 'Official account for Andy Burnham MP for Makerfield', 6.5K followers, latest post 1 day old",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "tiktok",
+          "handle": "@andy.burnham",
+          "url": "https://www.tiktok.com/@andy.burnham",
+          "activity": "high",
+          "evidence": "Linked from andyburnham.org.uk, and dubbed 'the TikTok PM' by The Week/LBC with ~2m views per video reported across TikTok and Instagram",
+          "verifiedAt": "2026-08-04"
+        }
+      ],
+      "socialsNote": "Video-first PM: TikTok and Instagram are the centre of his comms with the renamed X account @andyburnham close behind; Facebook is only a small Makerfield constituency page. WARNING: his old mayoral X handle @AndyBurnhamGM is now squatted by an imposter account (joined June 2026, zero posts) with a PM bio — do not use it.",
+      "code": "GB"
+    },
+    {
+      "id": "modi",
+      "name": "Narendra Modi",
+      "country": "India",
+      "role": "Prime Minister",
+      "party": "",
+      "colour": "#c07a3a",
+      "query": "\"Narendra Modi\" OR \"PM Modi\" when:2d",
+      "strongNames": [
+        "narendra modi",
+        "pm modi",
+        "prime minister modi"
+      ],
+      "weakSurname": "modi",
+      "weakContext": [
+        "india",
+        "new delhi",
+        "delhi",
+        "prime minister"
+      ],
+      "verifiedAt": "2026-08-03",
+      "note": "The NZ-India FTA (signed Apr 2026) makes Delhi a first-order file; his Russia balancing act shapes the rules-based-order argument.",
+      "homeTokens": [
+        "india",
+        "indian",
+        "new delhi",
+        "delhi"
+      ],
+      "socials": [
+        {
+          "platform": "x",
+          "handle": "@narendramodi",
+          "url": "https://x.com/narendramodi",
+          "activity": "high",
+          "evidence": "Linked from official site narendramodi.in and cited by DD News/Gulf News as the most-followed world-leader X account (100M+ followers)",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "instagram",
+          "handle": "@narendramodi",
+          "url": "https://www.instagram.com/narendramodi/",
+          "activity": "high",
+          "evidence": "NewsOnAir and Open Magazine (Feb 2026) covered the account crossing 100M followers, first world leader to do so; linked from narendramodi.in",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "facebook",
+          "handle": "narendramodi",
+          "url": "https://www.facebook.com/narendramodi/",
+          "activity": "high",
+          "evidence": "Official page linked from narendramodi.in and counted in 2026 most-followed-world-leader coverage; carries daily cross-posts of his X/event content",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "youtube",
+          "handle": "@NarendraModi",
+          "url": "https://www.youtube.com/@NarendraModi",
+          "activity": "high",
+          "evidence": "Free Press Journal reported the channel crossing 30M subscribers (highest of any world leader); hosts Mann Ki Baat playlist and near-daily speech uploads and livestreams",
+          "verifiedAt": "2026-08-04"
+        }
+      ],
+      "socialsNote": "Primary channel is personal X (@narendramodi), the world's most-followed leader account; Instagram crossed 100M in Feb 2026, and Facebook and YouTube carry the same daily speech/event output, all team-run at scale.",
+      "code": "IN"
+    },
+    {
+      "id": "putin",
+      "name": "Vladimir Putin",
+      "country": "Russia",
+      "role": "President",
+      "party": "",
+      "colour": "#8a5a7a",
+      "query": "Putin when:2d",
+      "strongNames": [
+        "vladimir putin",
+        "president putin"
+      ],
+      "weakSurname": "putin",
+      "weakContext": [
+        "russia",
+        "kremlin",
+        "moscow",
+        "ukraine"
+      ],
+      "verifiedAt": "2026-08-03",
+      "note": "The standing test case for her international-law frame: sanctions, the UN Charter, and who calls out whom.",
+      "homeTokens": [
+        "russia",
+        "russian",
+        "moscow",
+        "kremlin"
+      ],
+      "socials": [
+        {
+          "platform": "official",
+          "handle": "en.kremlin.ru",
+          "url": "http://en.kremlin.ru/",
+          "activity": "high",
+          "evidence": "Kremlin has publicly confirmed Putin has no personal social accounts; the presidential site publishes his transcripts, decrees and statements most days",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "official",
+          "handle": "@KremlinRussia_E (institutional Kremlin X, not personal)",
+          "url": "https://x.com/KremlinRussia_E",
+          "activity": "medium",
+          "evidence": "Washington Post coverage confirms this is the Kremlin's official English X feed carrying his statements; current posting cadence could not be independently confirmed, so ranked conservatively",
+          "verifiedAt": "2026-08-04"
+        }
+      ],
+      "socialsNote": "No personal accounts on any platform (Kremlin-confirmed); he lives online only through the institutional Kremlin site en.kremlin.ru, with state feeds like @KremlinRussia_E relaying his statements.",
+      "code": "RU"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+data/auto/prev-corpus.json
+data/auto/http-cache.json
+*.tmp
+.DS_Store

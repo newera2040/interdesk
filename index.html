@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>InterDesk</title>
+  <meta name="description" content="Foreign affairs wire and briefing desk.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-hn3F9779kO3ruuwec4zryA1xFIEjM272wH3+Fz77w4k='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https: http://localhost:*; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2315171b'/%3E%3Crect x='24' y='22' width='52' height='4' fill='%23e8e6e1'/%3E%3Ctext x='50' y='76' font-size='46' font-family='Georgia,serif' font-weight='bold' fill='%23e8e6e1' text-anchor='middle'%3EID%3C/text%3E%3C/svg%3E">
+
+  <!-- Installable app (Add to Home Screen). The archive lives in IndexedDB
+       per origin; the installed app gets its own storage partition on iOS. -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="InterDesk">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6f4ef">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#15171b">
+  <script>
+    // Standalone (Home Screen) detection, before first paint so the chrome
+    // never flashes.
+    if (navigator.standalone || matchMedia("(display-mode: standalone)").matches) {
+      document.documentElement.dataset.standalone = "1";
+    }
+    // Theme hint: the real theme setting lives in IndexedDB, which arrives too
+    // late for the gate's first paint. Settings mirrors it here on every change.
+    try {
+      var t = localStorage.getItem("interdesk.theme");
+      if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+    } catch (e) { /* private mode: system theme applies */ }
+  </script>
+
+  <style>
+    /* Gate-critical CSS, inlined so the lock screen paints before css/style.css
+       arrives. KEEP IN SYNC with the :root tokens in css/style.css. */
+    :root {
+      --g-paper: #15171b; --g-paper2: #1c1f24; --g-ink: #e8e6e1;
+      --g-ink3: rgba(232, 230, 225, 0.45); --g-good: #55997a; --g-red: #cd5b45;
+      --g-serif: "Iowan Old Style", "Georgia", "Times New Roman", serif;
+      --g-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    html[data-theme="light"] {
+      --g-paper: #f6f4ef; --g-paper2: #fdfcf9; --g-ink: #1b1a18;
+      --g-ink3: rgba(27, 26, 24, 0.45); --g-good: #2d7352; --g-red: #b03a26;
+    }
+    @media (prefers-color-scheme: light) {
+      html:not([data-theme="dark"]) {
+        --g-paper: #f6f4ef; --g-paper2: #fdfcf9; --g-ink: #1b1a18;
+        --g-ink3: rgba(27, 26, 24, 0.45); --g-good: #2d7352; --g-red: #b03a26;
+      }
+    }
+    #gate {
+      position: fixed; inset: 0; z-index: 3000; background: var(--g-paper);
+      color: var(--g-ink); display: flex; flex-direction: column; align-items: center;
+      padding: calc(env(safe-area-inset-top, 0px) + 24px) 24px calc(env(safe-area-inset-bottom, 0px) + 40px);
+      font-family: var(--g-sans);
+      transition: opacity 260ms cubic-bezier(0.2, 0, 0, 1), transform 260ms cubic-bezier(0.2, 0, 0, 1);
+    }
+    #gate.away { opacity: 0; transform: scale(1.04); pointer-events: none; }
+    #gate[hidden] { display: none; }
+    .gate-plate { margin: 12vh auto auto; text-align: center; }
+    .gate-name {
+      display: block; font-family: var(--g-serif);
+      font-size: 24px; font-weight: 600; letter-spacing: 0.01em;
+      border-top: 1px solid var(--g-ink3); border-bottom: 1px solid var(--g-ink3);
+      padding: 12px 6px 13px;
+    }
+    .gate-status { font-size: 12px; letter-spacing: 0.02em; color: var(--g-ink3); margin: 0 0 4px; min-height: 16px; }
+    .gate-status.err { color: var(--g-red); }
+    .gate-dots { display: flex; gap: 18px; margin: 24px 0 40px; }
+    .gd {
+      width: 12px; height: 12px; border-radius: 50%;
+      border: 1.5px solid var(--g-ink3); background: transparent;
+      transition: background 120ms cubic-bezier(0.34, 1.56, 0.64, 1), transform 120ms cubic-bezier(0.34, 1.56, 0.64, 1), border-color 120ms;
+    }
+    .gd.on { background: var(--g-ink); border-color: var(--g-ink); transform: scale(1.05); }
+    .gate-dots.ok .gd { background: var(--g-good); border-color: var(--g-good); }
+    .gate-dots.err .gd { border-color: var(--g-red); }
+    .gate-dots.shake { animation: gate-shake 320ms ease-in-out; }
+    @keyframes gate-shake {
+      0%, 100% { transform: translateX(0); }
+      15% { transform: translateX(-8px); } 35% { transform: translateX(8px); }
+      55% { transform: translateX(-5px); } 75% { transform: translateX(5px); }
+    }
+    .gate-pad {
+      display: grid; grid-template-columns: repeat(3, var(--key));
+      gap: clamp(12px, 2.4vh, 22px) 26px; --key: clamp(60px, 9vh, 76px);
+      touch-action: manipulation;
+    }
+    .gate-key {
+      width: var(--key); height: var(--key); border-radius: 50%;
+      border: 1px solid color-mix(in srgb, var(--g-ink) 26%, transparent);
+      background: transparent; color: var(--g-ink);
+      font-family: var(--g-sans); font-size: 27px; font-weight: 300;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none;
+      transition: transform 90ms ease-out, background 90ms ease-out, border-color 90ms ease-out;
+    }
+    .gate-key.pressed {
+      transform: scale(0.92);
+      background: color-mix(in srgb, var(--g-ink) 14%, transparent);
+      border-color: var(--g-ink3);
+      transition-duration: 60ms;
+    }
+    .gate-key:disabled { opacity: 0.35; cursor: default; }
+    .gate-key.gate-del { font-size: 20px; }
+    .gate-blank { width: var(--key); height: var(--key); }
+    @media (hover: hover) { .gate-key:hover { border-color: var(--g-ink3); } }
+    @media (prefers-reduced-motion: reduce) {
+      #gate { transition: opacity 150ms linear; }
+      #gate.away { transform: none; }
+      .gd, .gate-key { transition: none; }
+      .gate-dots.shake { animation: none; }
+    }
+    /* Fail closed: until gate.js decides otherwise, only the gate is visible. */
+    body.locked { overflow: hidden; }
+    body.locked #shell { visibility: hidden; }
+  </style>
+  <script src="js/gate.js?v=5"></script>
+
+  <link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body class="locked">
+  <div id="gate" role="dialog" aria-modal="true" aria-label="InterDesk is locked. Enter PIN.">
+    <div class="gate-plate" aria-hidden="true">
+      <span class="gate-name">Vanushi Walters</span>
+    </div>
+    <p class="gate-status" id="gate-status" role="status">Enter PIN</p>
+    <div class="gate-dots" id="gate-dots" aria-hidden="true">
+      <span class="gd"></span><span class="gd"></span><span class="gd"></span><span class="gd"></span>
+    </div>
+    <div class="gate-pad" id="gate-pad" role="group" aria-label="PIN keypad">
+      <button type="button" class="gate-key" data-k="1">1</button>
+      <button type="button" class="gate-key" data-k="2">2</button>
+      <button type="button" class="gate-key" data-k="3">3</button>
+      <button type="button" class="gate-key" data-k="4">4</button>
+      <button type="button" class="gate-key" data-k="5">5</button>
+      <button type="button" class="gate-key" data-k="6">6</button>
+      <button type="button" class="gate-key" data-k="7">7</button>
+      <button type="button" class="gate-key" data-k="8">8</button>
+      <button type="button" class="gate-key" data-k="9">9</button>
+      <span class="gate-blank" aria-hidden="true"></span>
+      <button type="button" class="gate-key" data-k="0">0</button>
+      <button type="button" class="gate-key gate-del" data-k="del" aria-label="Delete last digit"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.2 5.5h11.3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H8.2L3 12z"/><path d="M11.5 9.5l5 5M16.5 9.5l-5 5"/></svg></button>
+    </div>
+  </div>
+
+  <div id="shell" inert>
+    <header class="masthead" id="masthead">
+      <div class="masthead-inner">
+        <div class="nameplate"><span class="np-name">InterDesk</span><small class="np-sub">Vanushi Walters</small></div>
+        <div class="mast-controls">
+          <span class="mast-chip" id="mast-fresh">Starting…</span>
+          <span class="mast-chip desk-chip" id="mast-desk" hidden>Desk</span>
+          <button class="btn icon" id="btn-sweep" data-action="staged-sweep" title="Update the wire" aria-label="Update the wire"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 3.5V8h-4.5"/></svg></button>
+          <button class="btn icon" id="btn-theme" data-action="theme" title="Night desk / day desk" aria-label="Night desk / day desk"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg></button>
+        </div>
+      </div>
+      <div class="clockbar" id="clockbar" aria-label="World clock"></div>
+    </header>
+
+    <nav class="navbar" id="navbar"><div class="navbar-inner" id="nav"></div></nav>
+
+    <main class="page" id="main">
+      <div class="empty-state"><div class="big">Opening the desk&hellip;</div></div>
+    </main>
+
+    <nav class="tabbar" id="tabbar" aria-label="Primary"></nav>
+    <div id="sheet-root"></div>
+    <div id="overlay-root"></div>
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <!-- Load order rule: pure data/function modules first; anything consumed at
+       render time sits before ui.js; app.js is always last. ?v=5 is
+       stale-cache insurance off localhost — bump with sw.js VERSION. -->
+  <script src="js/store.js?v=5"></script>
+  <script src="js/net.js?v=5"></script>
+  <script src="js/relay.js?v=5"></script>
+  <script src="js/parse.js?v=5"></script>
+  <script src="js/cluster.js?v=5"></script>
+  <script src="js/fatopics.js?v=5"></script>
+  <script src="js/fadata.js?v=5"></script>
+  <script src="js/sources.js?v=5"></script>
+  <script src="js/charts.js?v=5"></script>
+  <script src="js/corpus.js?v=5"></script>
+  <script src="js/clock.js?v=5"></script>
+  <script src="js/local.js?v=5"></script>
+  <script src="js/ai.js?v=5"></script>
+  <script src="js/ui.js?v=5"></script>
+  <script src="js/app.js?v=5"></script>
+</body>
+</html>

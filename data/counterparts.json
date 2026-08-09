@@ -1,0 +1,391 @@
+{
+  "schema": 1,
+  "verified": "2026-08-03",
+  "reviewBy": "2026-11-07",
+  "reviewNote": "General election 7 November 2026: full re-verification of every holder, feed and handle is mandatory after government formation. Registry reflects Luxon's 2 April 2026 election-year reshuffle (effective 7 April): Penk took Defence + NZSIS + GCSB from the retiring Collins; Mitchell gained a delegated Associate National Security and Intelligence role; Goldsmith took Pacific Peoples from the retiring Reti.",
+  "ministryHandles": [
+    {
+      "handle": "MFATNZ",
+      "kind": "ministry",
+      "note": "MFAT's institutional account — distinct from the minister's @NewZealandMFA."
+    }
+  ],
+  "counterparts": [
+    {
+      "id": "peters",
+      "name": "Rt Hon Winston Peters",
+      "matchName": "Winston Peters",
+      "surname": "Peters",
+      "party": "nzfirst",
+      "role": "Minister of Foreign Affairs",
+      "portfolios": [
+        "Foreign Affairs"
+      ],
+      "scope": "full",
+      "xHandles": [
+        {
+          "handle": "NewZealandMFA",
+          "kind": "official",
+          "note": "The Foreign Minister's account, displayed as 'Winston Peters'; his own posts are signed -WP. Verified active 3 Aug 2026."
+        },
+        {
+          "handle": "winstonpeters",
+          "kind": "personal",
+          "note": "Personal/party-leader account — where the news actually happens. Verified highly active 2026."
+        }
+      ],
+      "gnewsQuery": "\"Winston Peters\"",
+      "weakContext": [
+        "foreign minister",
+        "foreign affairs minister",
+        "nz first",
+        "new zealand first",
+        "deputy prime minister"
+      ],
+      "colour": "#8b8f98",
+      "note": "Her direct opposite. Minister feed (bh-peters) is deliberately unfiltered — off-portfolio output included.",
+      "socials": [
+        {
+          "platform": "x",
+          "handle": "@winstonpeters",
+          "url": "https://x.com/winstonpeters",
+          "activity": "high",
+          "evidence": "Linked from his official NZ First profile page (nzfirst.nz/winston-peters); verified individual account with 94K followers per profile data, with posts within the past week (early Aug 2026) and constant news citation of his tweets.",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "x",
+          "handle": "@NewZealandMFA",
+          "url": "https://x.com/NewZealandMFA",
+          "activity": "high",
+          "evidence": "Government-verified official Foreign Minister account (bio: posts signed \"-WP\"); 2,578 posts since Dec 2023 (roughly 2-3 per day) per profile data, with diplomatic posts as recent as late July 2026.",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "instagram",
+          "handle": "@winstonpetersnzfirst",
+          "url": "https://www.instagram.com/winstonpetersnzfirst/",
+          "activity": "high",
+          "evidence": "Linked from his official NZ First profile page; profile (10.1K followers) shows multiple posts on most days from late July to 5 Aug 2026, all campaign/party content with a party authorisation statement in the bio. Note: the handle is winstonpetersnzfirst, NOT winstonpetersnz.",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "facebook",
+          "handle": "Winston Peters (facebook.com/winstonpeters)",
+          "url": "https://www.facebook.com/winstonpeters",
+          "activity": "high",
+          "evidence": "Linked from his official NZ First profile page and set as the website on his verified X profile; media coverage of his election-2026 social push cites a June 2026 Facebook post passing 1.7M views.",
+          "verifiedAt": "2026-08-04"
+        }
+      ],
+      "socialsNote": "Personal X is his primary voice and the account news cites; the ministerial @NewZealandMFA runs a parallel near-daily diplomatic feed, while party-authorised Facebook and Instagram are in full election-2026 campaign swing. No personal TikTok/YouTube could be verified (party channels only)."
+    },
+    {
+      "id": "penk",
+      "name": "Hon Chris Penk",
+      "matchName": "Chris Penk",
+      "surname": "Penk",
+      "party": "national",
+      "role": "Minister of Defence; Minister Responsible for the NZSIS and GCSB",
+      "portfolios": [
+        "Defence",
+        "NZSIS",
+        "GCSB",
+        "Space",
+        "Veterans"
+      ],
+      "scope": "full",
+      "xHandles": [
+        {
+          "handle": "ChrisPenknz",
+          "kind": "personal",
+          "note": "Verified 3 Aug 2026."
+        }
+      ],
+      "gnewsQuery": "\"Chris Penk\"",
+      "weakContext": [
+        "defence minister",
+        "minister of defence",
+        "nzsis",
+        "gcsb",
+        "intelligence"
+      ],
+      "colour": "#4e79c7",
+      "note": "Her intelligence opposite (all three of Defence, NZSIS and GCSB since 7 Apr 2026). The GCSB and NZSIS beehive term (6837) is new and near-silent; expect his output on bh-penk and bh-defence.",
+      "socials": [
+        {
+          "platform": "x",
+          "handle": "@ChrisPenknz",
+          "url": "https://x.com/ChrisPenknz",
+          "activity": "medium",
+          "evidence": "Profile bio lists his ministerial OIA address (c.penk@ministers.govt.nz) and links his National Party site; 24,689 tweets since 2009 per profile data, with personally-voiced posts observed through 2026 (e.g. Anzac Day with Richard Marles, April 2026).",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "facebook",
+          "handle": "Chris Penk MP (facebook.com/christopherpenk)",
+          "url": "https://www.facebook.com/christopherpenk",
+          "activity": "medium",
+          "evidence": "Linked from his official National Party contact page (national.org.nz/team/chrispenk/contact); page (10K+ likes) carries his recurring \"The Latest from Parliament\" video updates, though exact recent-post dates could not be read behind the login wall.",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "instagram",
+          "handle": "@chris_penk_nz",
+          "url": "https://www.instagram.com/chris_penk_nz",
+          "activity": "medium",
+          "evidence": "Linked from his official National Party contact page; profile shows steady posts 14 July - 3 Aug 2026 on electorate and ministerial topics (shellfish ban, Northland Expressway, building consents), roughly 2-3 per week.",
+          "verifiedAt": "2026-08-04"
+        }
+      ],
+      "socialsNote": "Spreads fairly evenly across three personally-voiced channels: a long-running conversational X account, a Facebook page with regular parliamentary video updates, and an active electorate-flavoured Instagram; none is daily, all are weekly-ish. No Truth Social/TikTok presence could be verified; official ministerial presence is beehive.govt.nz/minister/hon-chris-penk."
+    },
+    {
+      "id": "mcclay",
+      "name": "Hon Todd McClay",
+      "matchName": "Todd McClay",
+      "surname": "McClay",
+      "party": "national",
+      "role": "Minister for Trade and Investment; Associate Minister of Foreign Affairs",
+      "portfolios": [
+        "Trade and Investment",
+        "Associate Foreign Affairs",
+        "Agriculture",
+        "Forestry"
+      ],
+      "scope": "full",
+      "xHandles": [
+        {
+          "handle": "toddmcclaymp",
+          "kind": "personal",
+          "note": "Verified 3 Aug 2026."
+        }
+      ],
+      "gnewsQuery": "\"Todd McClay\"",
+      "weakContext": [
+        "trade minister",
+        "minister for trade",
+        "associate foreign"
+      ],
+      "colour": "#4e79c7",
+      "note": "The sole Associate Foreign Minister (per MFAT, re-verified 3 Aug 2026) — deputises for Peters abroad.",
+      "socials": [
+        {
+          "platform": "facebook",
+          "handle": "ToddMcClayMPforRotorua",
+          "url": "https://www.facebook.com/ToddMcClayMPforRotorua/",
+          "activity": "medium",
+          "evidence": "Linked from his official National Party profile (national.org.nz/toddmcclay); posting as recently as 4 July 2026 with regular electorate content (16.6k likes)",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "x",
+          "handle": "@toddmcclaymp",
+          "url": "https://x.com/toddmcclaymp",
+          "activity": "inactive",
+          "evidence": "Bio carries the parliamentary authorisation statement and links his official site toddmcclay.co.nz, and news orgs cite the account; but the X syndication timeline shows no posts since 14 Jan 2025",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "instagram",
+          "handle": "@toddmcclaymp",
+          "url": "https://www.instagram.com/toddmcclaymp/",
+          "activity": "low",
+          "evidence": "Linked from his official National Party profile page and bio matches his current ministerial portfolios; small (~945 followers) with only occasional ministerial-travel reels surfacing",
+          "verifiedAt": "2026-08-04"
+        }
+      ],
+      "socialsNote": "Lives on his electorate-focused Facebook page; X was his trade-announcement channel through 2024 but has been dormant since Jan 2025, and Instagram is small and sporadic (beware an older duplicate @toddmcclay IG account that is not the party-linked one)."
+    },
+    {
+      "id": "luxon",
+      "name": "Rt Hon Christopher Luxon",
+      "matchName": "Christopher Luxon",
+      "surname": "Luxon",
+      "party": "national",
+      "role": "Prime Minister — Minister for National Security and Intelligence",
+      "portfolios": [
+        "National Security and Intelligence"
+      ],
+      "scope": "portfolio-only",
+      "xHandles": [
+        {
+          "handle": "chrisluxonmp",
+          "kind": "personal",
+          "note": "Verified active 2026. Only intelligence-context posts belong in his timeline — see scope."
+        }
+      ],
+      "gnewsQuery": null,
+      "weakContext": [
+        "national security and intelligence",
+        "nzsis",
+        "gcsb",
+        "intelligence agencies",
+        "threat assessment"
+      ],
+      "colour": "#4e79c7",
+      "note": "Intelligence hat ONLY. Never bare-name match; never subscribe his general minister term (6794) — the whole PM feed would flood the space. Fed solely by bh-natsec (6715) plus surname+intelligence-context weak rule.",
+      "socials": [
+        {
+          "platform": "instagram",
+          "handle": "@christopherluxon",
+          "url": "https://www.instagram.com/christopherluxon/",
+          "activity": "high",
+          "evidence": "Newsroom (20 Feb 2026) cites his 250,000-plus-follower Instagram as a busy staff-coordinated channel; bio identifies him as Prime Minister of New Zealand (~256k followers, 2,300+ posts)",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "facebook",
+          "handle": "christopherluxon",
+          "url": "https://www.facebook.com/christopherluxon/",
+          "activity": "high",
+          "evidence": "Newsroom (20 Feb 2026) reports 192,600 followers and frequent posts (family/PM content) drawing hundreds of replies; PM's office confirmed staff coordinate the accounts",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "x",
+          "handle": "@chrisluxonmp",
+          "url": "https://x.com/chrisluxonmp",
+          "activity": "high",
+          "evidence": "Account carries X government-account verification with PM bio and OIA ministerial email; syndication timeline shows near-daily posts through 3 Aug 2026",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "tiktok",
+          "handle": "@christopherluxonmp",
+          "url": "https://www.tiktok.com/@christopherluxonmp",
+          "activity": "medium",
+          "evidence": "PM-branded profile (~177k followers, 3.4M likes) with videos matching his verified official engagements (e.g. Beijing trade visit, policy announcements); 2026 cadence not directly confirmed",
+          "verifiedAt": "2026-08-04"
+        }
+      ],
+      "socialsNote": "Runs a genuinely multi-platform, staff-coordinated operation: Instagram and Facebook are his biggest audiences and carry the relatable family/PM content, X is near-daily for announcements and policy, and TikTok is a secondary policy-video channel."
+    },
+    {
+      "id": "mitchell",
+      "name": "Hon Mark Mitchell",
+      "matchName": "Mark Mitchell",
+      "surname": "Mitchell",
+      "party": "national",
+      "role": "Associate Minister for National Security and Intelligence",
+      "portfolios": [
+        "Associate National Security and Intelligence"
+      ],
+      "scope": "portfolio-only",
+      "defaultOff": true,
+      "xHandles": [
+        {
+          "handle": "MarkMitchellMP",
+          "kind": "personal",
+          "note": "Verified real; low posting cadence. His Police/Corrections output must NOT leak in — portfolio-only scope."
+        }
+      ],
+      "gnewsQuery": null,
+      "weakContext": [
+        "national security and intelligence",
+        "nzsis",
+        "gcsb",
+        "intelligence"
+      ],
+      "colour": "#4e79c7",
+      "note": "New delegated role from the April 2026 reshuffle. Name-rules only (no feed subscription — his minister feed is mostly Police noise). Common surname: the weak rule requires intelligence context.",
+      "socials": [
+        {
+          "platform": "facebook",
+          "handle": "markmitchellmp",
+          "url": "https://www.facebook.com/markmitchellmp",
+          "activity": "high",
+          "evidence": "Linked from his national.org.nz bio; page carries 'Authorised by Mark Mitchell MP, Orewa' imprint plus his parliament.govt.nz email, and at 20K followers with a 23 Jul post drawing 1.3K reactions it is clearly his primary, most-engaged channel.",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "instagram",
+          "handle": "@markmitchellmp",
+          "url": "https://www.instagram.com/markmitchellmp",
+          "activity": "low",
+          "evidence": "Linked from his national.org.nz bio and carries Instagram's verified badge; own-feed posts on 22 Jul and 2 Jul then roughly weekly through June (5,395 followers) — sporadic recently.",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "x",
+          "handle": "@MarkMitchellMP",
+          "url": "https://x.com/MarkMitchellMP",
+          "activity": "low",
+          "evidence": "Profile inspected directly: carries 'Authorised by Mark Mitchell, Tamariki House, 7 Tamariki Ave, Orewa' imprint and links his official site markmitchell.national.org.nz; most recent posts 21/20 Apr 2026 then Jan 2026 — event-driven, months apart.",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "official",
+          "handle": "beehive.govt.nz/minister/hon-mark-mitchell",
+          "url": "https://www.beehive.govt.nz/minister/hon-mark-mitchell",
+          "activity": "medium",
+          "evidence": "Official Beehive ministerial page with his press-release feed; no personal TikTok, YouTube or Truth Social exists — his party bio links only party-run channels for those.",
+          "verifiedAt": "2026-08-04"
+        }
+      ],
+      "socialsNote": "Lives on Facebook — it is his main channel by follower count and engagement; Instagram is an occasional mirror and X is kept for major events and emergencies only."
+    },
+    {
+      "id": "goldsmith",
+      "name": "Hon Paul Goldsmith",
+      "matchName": "Paul Goldsmith",
+      "surname": "Goldsmith",
+      "party": "national",
+      "role": "Minister for Pacific Peoples",
+      "portfolios": [
+        "Pacific Peoples"
+      ],
+      "scope": "full",
+      "defaultOff": true,
+      "xHandles": [
+        {
+          "handle": "PaulGoldsmithMP",
+          "kind": "personal",
+          "note": "Verified real; low-volume account."
+        }
+      ],
+      "gnewsQuery": "\"Paul Goldsmith\" Pacific",
+      "weakContext": [
+        "pacific peoples",
+        "minister for pacific"
+      ],
+      "colour": "#4e79c7",
+      "note": "Domestic-facing portfolio (NZ Pacific communities, not Pacific foreign policy) and Labour has a separate spokesperson (Sepuloni) — registered but off; fed by bh-pacific (6725) when enabled.",
+      "socials": [
+        {
+          "platform": "facebook",
+          "handle": "paulgoldsmithmp",
+          "url": "https://www.facebook.com/paulgoldsmithmp",
+          "activity": "high",
+          "evidence": "Linked from his national.org.nz bio; page carries 'Authorised by P Goldsmith, Parliament Buildings, Wgtn' imprint with his parliament.govt.nz email; 17K followers and the latest post was 1 day old when checked — his primary channel.",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "instagram",
+          "handle": "@paulgoldsmithmp",
+          "url": "https://www.instagram.com/paulgoldsmithmp",
+          "activity": "medium",
+          "evidence": "Linked from his national.org.nz bio and carries Instagram's verified badge; own posts dated 3 Aug, 29 Jul (x2), 24, 20, 19, 18, 12 and 10 Jul 2026 — every 2-3 days, though to a small 2,333-follower audience.",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "x",
+          "handle": "@PaulGoldsmithMP",
+          "url": "https://x.com/PaulGoldsmithMP",
+          "activity": "inactive",
+          "evidence": "Profile inspected directly: carries 'Authorised by P Goldsmith, Parliament Buildings, Wgtn' imprint and links his official site paulgoldsmith.co.nz, but the newest post is 8 Apr 2024 and the bio still omits his 2026 Pacific Peoples portfolio — dormant for over two years.",
+          "verifiedAt": "2026-08-04"
+        },
+        {
+          "platform": "official",
+          "handle": "beehive.govt.nz/minister/biography/paul-goldsmith-0",
+          "url": "https://www.beehive.govt.nz/minister/biography/paul-goldsmith-0",
+          "activity": "medium",
+          "evidence": "Official Beehive ministerial biography and release feed across his portfolios; no personal TikTok, YouTube or Truth Social exists — his party bio links only party-run channels.",
+          "verifiedAt": "2026-08-04"
+        }
+      ],
+      "socialsNote": "Day-to-day presence is Facebook, with Instagram mirroring it every few days to a much smaller audience; his X account has been abandoned since April 2024 and should not be treated as current."
+    }
+  ]
+}

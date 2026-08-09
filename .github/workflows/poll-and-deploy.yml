@@ -1,0 +1,85 @@
+# InterDesk — poll feeds every ~20 minutes and deploy to GitHub Pages.
+#
+# Design notes:
+# - Artifact-only deploys: the corpus is baked in the workspace and shipped in
+#   the Pages artifact, never committed. State across runs comes from
+#   (a) priming off the live site's previous corpus and (b) the HTTP
+#   conditional-GET cache restored via actions/cache. The only recurring
+#   commit is the once-a-day archive rollup.
+# - Cron minutes 7,27,47: top-of-hour is GitHub's most congested, most-skipped
+#   slot. Slippage of 3-15 min is normal — the app shows corpus age instead of
+#   promising a cadence.
+# - TIMEZONE CAVEAT: cron is UTC. The dense window below is 05:00-23:00 NZST
+#   (UTC+12). When NZDT (UTC+13) starts in late September the window drifts an
+#   hour later in local terms. That is accepted — it is a coverage window, not
+#   an SLA. Hand-shift the hour ranges by 1 if it ever matters.
+name: Poll feeds and deploy
+
+on:
+  schedule:
+    - cron: "7,27,47 17-23 * * *"   # 05:07-11:47 NZST
+    - cron: "7,27,47 0-10 * * *"    # 12:07-22:47 NZST
+    - cron: "37 11-16 * * *"        # overnight NZST, hourly
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: bake
+  cancel-in-progress: false
+
+jobs:
+  bake:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Restore HTTP conditional-GET cache
+        uses: actions/cache@v4
+        with:
+          path: data/auto/http-cache.json
+          key: http-cache-${{ github.run_id }}
+          restore-keys: http-cache-
+
+      - name: Prime from the live corpus (stateless repo)
+        run: |
+          mkdir -p data/auto
+          curl -fsS --max-time 30 -o data/auto/prev-corpus.json \
+            "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/data/auto/corpus.json" \
+            || echo "no previous corpus (first deploy?) — starting fresh"
+
+      - name: Bake corpus
+        env:
+          SITE_BASE: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+        run: python3 tools/poller.py   # stdlib only — no pip, no setup-python
+
+      - name: Commit daily archive rollup (first run after midnight NZT only)
+        run: |
+          if [ -n "$(git status --porcelain data/auto/archive)" ]; then
+            git config user.name interdesk-bot
+            git config user.email interdesk-bot@users.noreply.github.com
+            git add data/auto/archive
+            git commit -m "archive: daily rollup"
+            git push
+          fi
+
+      - name: Drop non-app files from the artifact
+        run: |
+          rm -f data/auto/prev-corpus.json data/auto/http-cache.json
+          rm -rf tools .github README.md DEPLOY.md PLAN.md .gitignore
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4
