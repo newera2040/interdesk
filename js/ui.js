@@ -299,16 +299,26 @@
     return out.join("\n");
   }
 
-  function viewWire(params) {
+  /* Live search queries live in uiState (typing must NEVER rewrite the URL
+     or rebuild the input mid-word); a q= param still seeds the box so wire
+     deep links keep working. */
+  function wireQuery(params) {
+    const ui = App.state.uiState;
+    return ui.wireQuery !== undefined ? ui.wireQuery : (params.get("q") || "");
+  }
+
+  function resultsCount(n, q) {
+    if (!q) return "";
+    return `<div class="results-count">${n === 0 ? "No matches" : n === 1 ? "1 match" : n + " matches"}</div>`;
+  }
+
+  function wireResults(params) {
     const S = App.state;
     const region = params.get("r") || "";
     const topic = params.get("t") || "";
-    const q = (params.get("q") || "").toLowerCase();
+    const q = wireQuery(params).trim().toLowerCase();
     const unreadOnly = params.get("u") === "1";
     const showMuted = params.get("muted") === "1";
-
-    const chips = [["", "All"], ["nz", "NZ"], ["official", "Wellington"], ["pacific", "Pacific"], ["global", "Powers"], ["analysis", "Analysis"]]
-      .map(([k, l]) => `<button class="chip ${region === k ? "active" : ""}" data-action="wire-region" data-r="${k}">${l}</button>`).join("");
 
     let items = S.items.filter(App.inScope);
     if (region) items = items.filter((i) => i.region === region);
@@ -317,14 +327,7 @@
     if (q) items = items.filter((i) => (i.title + " " + i.summary).toLowerCase().indexOf(q) >= 0);
     if (!showMuted) items = items.filter((i) => !App.isMuted(i));
 
-    const out = [`<div class="view-title"><h2>Wire</h2>
-      <span><button class="btn ghost icon" data-action="wire-search" aria-label="Search">${ICON_SEARCH}</button>
-      <button class="btn ghost icon" data-action="filter-sheet" aria-label="Filter">${ICON_FILTER}</button></span></div>`];
-    out.push(`<div class="chips">${chips}<button class="chip ${unreadOnly ? "active" : ""}" data-action="wire-unread">Unread</button>${topic ? `<button class="chip active" data-action="wire-topic" data-t="">${esc(Fatopics.label(topic))} ✕</button>` : ""}</div>`);
-    if (S.uiState.searchOpen || q) {
-      out.push(`<input type="text" id="wire-q" placeholder="Search the wire" value="${esc(params.get("q") || "")}" autocomplete="off" style="margin-bottom:10px">`);
-    }
-
+    const out = [resultsCount(items.length, q)];
     let day = "";
     let shown = 0;
     for (const item of items) {
@@ -334,7 +337,28 @@
       out.push(wireRow(item));
       shown++;
     }
-    if (!shown) out.push('<div class="empty-state"><div class="big">Nothing matches</div></div>');
+    if (!shown && !q) out.push('<div class="empty-state"><div class="big">Nothing matches</div></div>');
+    return out.join("\n");
+  }
+
+  function viewWire(params) {
+    const S = App.state;
+    const region = params.get("r") || "";
+    const topic = params.get("t") || "";
+    const unreadOnly = params.get("u") === "1";
+    const q = wireQuery(params);
+
+    const chips = [["", "All"], ["nz", "NZ"], ["official", "Wellington"], ["pacific", "Pacific"], ["global", "Powers"], ["analysis", "Analysis"]]
+      .map(([k, l]) => `<button class="chip ${region === k ? "active" : ""}" data-action="wire-region" data-r="${k}">${l}</button>`).join("");
+
+    const out = [`<div class="view-title"><h2>Wire</h2>
+      <span><button class="btn ghost icon" data-action="wire-search" aria-label="Search">${ICON_SEARCH}</button>
+      <button class="btn ghost icon" data-action="filter-sheet" aria-label="Filter">${ICON_FILTER}</button></span></div>`];
+    out.push(`<div class="chips">${chips}<button class="chip ${unreadOnly ? "active" : ""}" data-action="wire-unread">Unread</button>${topic ? `<button class="chip active" data-action="wire-topic" data-t="">${esc(Fatopics.label(topic))} ✕</button>` : ""}</div>`);
+    if (S.uiState.searchOpen || q) {
+      out.push(`<input type="text" id="wire-q" placeholder="Search the wire" value="${esc(q)}" autocomplete="off" style="margin-bottom:10px">`);
+    }
+    out.push(`<div class="search-results" id="search-results">${wireResults(params)}</div>`);
     return out.join("\n");
   }
 
@@ -771,13 +795,8 @@
     let fellThrough = false;
     if (mode === "direct" && !direct.length && coverage.length) { mode = "coverage"; fellThrough = true; }
 
-    let items = mode === "direct" ? direct : coverage;
     const type = ui.cpType || "";
-    if (mode === "direct" && type) items = items.filter((i) => (i.kind || "") === type);
-    const q = (ui.cpQuery || "").toLowerCase();
-    if (q) items = items.filter((i) => (i.title + " " + (i.summary || "") + " " + (i.via || i.sourceName)).toLowerCase().indexOf(q) >= 0);
     const sort = ui.cpSort === "newest" ? "newest" : "relevance";
-    items = sortPersonItems(items, cp, sort);
 
     const typeChips = mode === "direct"
       ? [["", "All"], ["release", "Releases"], ["speech", "Speeches"]]
@@ -798,7 +817,29 @@
         <input type="text" id="cp-q" placeholder="Search this file" value="${esc(ui.cpQuery || "")}" autocomplete="off">
       </div>`];
     if (fellThrough) out.push('<p class="quiet">No direct output in the current window — showing coverage.</p>');
+    out.push(`<div class="search-results" id="search-results">${cpResults(id)}</div>`);
+    return out.join("\n");
+  }
 
+  function cpResults(id) {
+    const cp = Sources.counterpart(id);
+    if (!cp) return "";
+    const ui = App.state.uiState;
+    const direct = App.counterpartItems(id, "author");
+    const directIds = new Set(direct.map((i) => i.id));
+    const coverage = App.coverageItems(cp).filter((i) => !directIds.has(i.id));
+    let mode = ui.cpCoverage ? "coverage" : "direct";
+    if (mode === "direct" && !direct.length && coverage.length) mode = "coverage";
+
+    let items = mode === "direct" ? direct : coverage;
+    const type = ui.cpType || "";
+    if (mode === "direct" && type) items = items.filter((i) => (i.kind || "") === type);
+    const q = (ui.cpQuery || "").trim().toLowerCase();
+    if (q) items = items.filter((i) => (i.title + " " + (i.summary || "") + " " + (i.via || i.sourceName)).toLowerCase().indexOf(q) >= 0);
+    const sort = ui.cpSort === "newest" ? "newest" : "relevance";
+    items = sortPersonItems(items, cp, sort);
+
+    const out = [resultsCount(items.length, q)];
     let day = "";
     for (const item of items.slice(0, 120)) {
       if (sort === "newest") {
@@ -807,7 +848,7 @@
       }
       out.push(personCard(item, cp));
     }
-    if (!items.length) out.push('<div class="empty-state"><div class="big">Nothing matches</div></div>');
+    if (!items.length && !q) out.push('<div class="empty-state"><div class="big">Nothing matches</div></div>');
     return out.join("\n");
   }
 
@@ -816,16 +857,7 @@
     if (!ld) return '<div class="empty-state"><div class="big">Unknown leader</div></div>';
     const ui = App.state.uiState;
     const scope = ui.ldScope || "";
-    // Union of poller-tagged leader items and the client relevance scan, so
-    // the file is never thinner than what the wire actually holds.
-    const tagged = App.leaderItems(id, scope || null);
-    const ids = new Set(tagged.map((i) => i.id));
-    let items = scope ? tagged
-      : tagged.concat(App.coverageItems(ld).filter((i) => !ids.has(i.id)));
-    const q = (ui.ldQuery || "").toLowerCase();
-    if (q) items = items.filter((i) => (i.title + " " + (i.summary || "") + " " + (i.via || i.sourceName)).toLowerCase().indexOf(q) >= 0);
     const sort = ui.ldSort === "newest" ? "newest" : "relevance";
-    items = sortPersonItems(items, ld, sort);
 
     const counts = App.leaderScopeCounts(id);
     const scopeChips = [["", `All · ${counts.globe + counts.country + counts.self}`],
@@ -841,7 +873,27 @@
           .map(([k, l]) => `<button data-action="ld-sort" data-s="${k}" class="${sort === k ? "active" : ""}">${l}</button>`).join("")}</div>
         <input type="text" id="ld-q" placeholder="Search this file" value="${esc(ui.ldQuery || "")}" autocomplete="off">
       </div>`];
+    out.push(`<div class="search-results" id="search-results">${ldResults(id)}</div>`);
+    return out.join("\n");
+  }
 
+  function ldResults(id) {
+    const ld = Sources.leader(id);
+    if (!ld) return "";
+    const ui = App.state.uiState;
+    const scope = ui.ldScope || "";
+    // Union of poller-tagged leader items and the client relevance scan, so
+    // the file is never thinner than what the wire actually holds.
+    const tagged = App.leaderItems(id, scope || null);
+    const ids = new Set(tagged.map((i) => i.id));
+    let items = scope ? tagged
+      : tagged.concat(App.coverageItems(ld).filter((i) => !ids.has(i.id)));
+    const q = (ui.ldQuery || "").trim().toLowerCase();
+    if (q) items = items.filter((i) => (i.title + " " + (i.summary || "") + " " + (i.via || i.sourceName)).toLowerCase().indexOf(q) >= 0);
+    const sort = ui.ldSort === "newest" ? "newest" : "relevance";
+    items = sortPersonItems(items, ld, sort);
+
+    const out = [resultsCount(items.length, q)];
     let day = "";
     for (const item of items.slice(0, 120)) {
       if (sort === "newest") {
@@ -852,16 +904,21 @@
         ? `<span class="kind sc-${esc(item.scope)}">${esc(item.scope === "self" ? "themselves" : item.scope === "globe" ? "globe" : "home")}</span>` : "";
       out.push(personCard(item, ld, scopeChip));
     }
-    if (!items.length) out.push('<div class="empty-state"><div class="big">Nothing matches</div></div>');
+    if (!items.length && !q) out.push('<div class="empty-state"><div class="big">Nothing matches</div></div>');
     return out.join("\n");
   }
 
   function viewSearch() {
+    return `<div class="view-title"><h2>Search</h2></div>
+      <input type="text" id="global-q" placeholder="Search everything" value="${esc(App.state.uiState.gq || "")}" autocomplete="off" autofocus style="margin-bottom:14px">
+      <div class="search-results" id="search-results">${globalResults()}</div>`;
+  }
+
+  function globalResults() {
     const q = (App.state.uiState.gq || "").trim().toLowerCase();
-    const out = [`<div class="view-title"><h2>Search</h2></div>
-      <input type="text" id="global-q" placeholder="Search everything" value="${esc(App.state.uiState.gq || "")}" autocomplete="off" autofocus style="margin-bottom:14px">`];
+    const out = [];
     if (q.length < 2) {
-      return out.join("\n");
+      return "";
     }
     const hit = (s) => String(s || "").toLowerCase().indexOf(q) >= 0;
     const items = App.state.items.filter((i) => hit(i.title) || hit(i.summary) || hit(i.via || i.sourceName)).slice(0, 40);
@@ -1018,7 +1075,23 @@
       const main = document.getElementById("main");
       const keep = {};
       for (const el of main.querySelectorAll("input[id], textarea[id]")) keep[el.id] = el.value;
-      const focused = document.activeElement && document.activeElement.id;
+      // The focused field must survive a rebuild EXACTLY: live value, caret
+      // and selection. A background render (relay sync, sweep) landing
+      // mid-word must never eat, select, or restart what's being typed.
+      const active = document.activeElement;
+      let focusInfo = null;
+      if (active && active.id && main.contains(active)) {
+        focusInfo = { id: active.id, text: false };
+        if (active.tagName === "INPUT" || active.tagName === "TEXTAREA") {
+          try {
+            focusInfo.text = true;
+            focusInfo.value = active.value;
+            focusInfo.start = active.selectionStart;
+            focusInfo.end = active.selectionEnd;
+            focusInfo.dir = active.selectionDirection;
+          } catch (_) { focusInfo.text = false; }
+        }
+      }
 
       let html = "";
       let activeTab = "#/";
@@ -1037,11 +1110,43 @@
         const el = document.getElementById(id);
         if (el && !el.value) el.value = v;
       }
-      if (focused) { const el = document.getElementById(focused); if (el) try { el.focus(); } catch (_) { /* gone */ } }
+      if (focusInfo) {
+        const el = document.getElementById(focusInfo.id);
+        if (el) {
+          try {
+            if (focusInfo.text && el.value !== focusInfo.value) el.value = focusInfo.value;
+            el.focus();
+            if (focusInfo.text && el.setSelectionRange && focusInfo.start != null) {
+              el.setSelectionRange(focusInfo.start, focusInfo.end, focusInfo.dir || "none");
+            }
+          } catch (_) { /* gone, or a field type without selection */ }
+        }
+      }
 
       UI.renderChrome(activeTab);
       App.observeSeen(main);
       window.scrollTo(0, App.uiScroll(path));
+    },
+
+    /* Keystroke path: refresh ONLY the results region — the input element is
+       never rebuilt, so the caret, selection and momentum of typing are
+       untouchable. Falls back to a full render on views without the region. */
+    renderSearchResults() {
+      const box = document.getElementById("search-results");
+      if (!box) return UI.render();
+      const { path, params } = parseHash();
+      let html = null;
+      let m;
+      if (/^#\/wire/.test(path)) html = wireResults(params);
+      else if ((m = path.match(/^#\/portfolio\/(.+)$/))) html = cpResults(m[1]);
+      else if ((m = path.match(/^#\/leader\/(.+)$/))) html = ldResults(m[1]);
+      else if (/^#\/search/.test(path)) html = globalResults();
+      if (html === null) return UI.render();
+      box.innerHTML = html;
+      box.classList.remove("in");
+      void box.offsetWidth; // restart the settle animation
+      box.classList.add("in");
+      App.observeSeen(box);
     },
 
     renderChrome(activeTab) {

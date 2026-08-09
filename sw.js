@@ -4,8 +4,8 @@
 
    data/auto/corpus.json is network-first WITH cache fallback: fresh always
    wins online, the last bake still reads offline. Never cache-first. */
-const VERSION = "interdesk-v5";
-const Q = "?v=5";
+const VERSION = "interdesk-v6";
+const Q = "?v=6";
 const ASSETS = [
   "./",
   "index.html",

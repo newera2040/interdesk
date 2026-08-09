@@ -654,6 +654,29 @@
     },
 
     /* ============ settings ============ */
+    /* Paste-accident repair for the relay URL: strip quotes/whitespace,
+       collapse doubled schemes, drop an embedded key (Safari refuses URLs
+       with credentials outright), default to https, trim trailing slashes.
+       Anything still unparseable is rejected with a plain-language toast
+       rather than stored to fail cryptically on every fetch. */
+    cleanRelayUrl(raw) {
+      let s = String(raw || "").replace(/["'`]/g, "").replace(/\s+/g, "");
+      if (!s) return "";
+      s = s.replace(/^(https?:\/\/)+/i, "https://");
+      if (!/^https?:\/\//i.test(s)) s = "https://" + s;
+      // A pasted "key@host" would be sent as credentials; keep the host only.
+      s = s.replace(/^(https:\/\/)[^/@]*@/i, "$1");
+      s = s.replace(/\/+$/, "");
+      try {
+        const u = new URL(s);
+        if (!u.hostname || u.hostname.indexOf(".") < 0) throw new Error("host");
+        return s;
+      } catch (_) {
+        UI.toast("That relay URL doesn't look right — check for stray characters", 5000);
+        return "";
+      }
+    },
+
     async saveSettings(patch) {
       App.state.settings = { ...App.state.settings, ...patch };
       // The desk key lives in memory for this session ONLY — it is never
@@ -985,22 +1008,21 @@
         if (el.dataset.action === "wire-muted") App.setWireParam("muted", el.checked ? "1" : "");
       });
 
+      // Search keystrokes refresh the results region only — never the view,
+      // never the input. One debounce per field; 140ms keeps it live without
+      // re-filtering on every single character of a fast burst.
+      const SEARCH_FIELDS = {
+        "wire-q": (v) => { App.state.uiState.wireQuery = v; },
+        "cp-q": (v) => { App.state.uiState.cpQuery = v; },
+        "ld-q": (v) => { App.state.uiState.ldQuery = v; },
+        "global-q": (v) => { App.state.uiState.gq = v; },
+      };
       document.addEventListener("input", (e) => {
-        if (e.target.id === "wire-q") {
-          clearTimeout(App._qT);
-          App._qT = setTimeout(() => App.setWireParam("q", e.target.value), 250);
-        }
-        if (e.target.id === "cp-q") {
-          clearTimeout(App._cpqT);
-          App._cpqT = setTimeout(() => { App.state.uiState.cpQuery = e.target.value; UI.render(); }, 250);
-        }
-        if (e.target.id === "ld-q") {
-          clearTimeout(App._ldqT);
-          App._ldqT = setTimeout(() => { App.state.uiState.ldQuery = e.target.value; UI.render(); }, 250);
-        }
-        if (e.target.id === "global-q") {
-          clearTimeout(App._gqT);
-          App._gqT = setTimeout(() => { App.state.uiState.gq = e.target.value; UI.render(); }, 250);
+        if (SEARCH_FIELDS[e.target.id]) {
+          const set = SEARCH_FIELDS[e.target.id];
+          const v = e.target.value;
+          clearTimeout(App._searchT);
+          App._searchT = setTimeout(() => { set(v); UI.renderSearchResults(); }, 140);
         }
         if (e.target.id === "desk-md") {
           const d = App.state.uiState.deskDraft;
@@ -1012,7 +1034,7 @@
           }
         }
         if (e.target.id === "set-apikey") App.saveSettings({ apiKey: e.target.value.trim() });
-        if (e.target.id === "set-relayurl") App.saveSettings({ relayUrl: e.target.value.trim() });
+        if (e.target.id === "set-relayurl") App.saveSettings({ relayUrl: App.cleanRelayUrl(e.target.value) });
         if (e.target.id === "set-relaykey") App.saveSettings({ relayKey: e.target.value.trim() });
       });
 
@@ -1196,7 +1218,14 @@
         const p = new URLSearchParams((location.hash.split("?")[1] || ""));
         App.setWireParam("u", p.get("u") === "1" ? "" : "1");
       },
-      "wire-search": () => { App.state.uiState.searchOpen = !App.state.uiState.searchOpen; UI.render(); const q = document.getElementById("wire-q"); if (q) q.focus(); },
+      "wire-search": () => {
+        const ui = App.state.uiState;
+        ui.searchOpen = !ui.searchOpen;
+        if (!ui.searchOpen) ui.wireQuery = ""; // closing the search clears it
+        UI.render();
+        const q = document.getElementById("wire-q");
+        if (q) q.focus();
+      },
       "filter-sheet": () => {
         const p = new URLSearchParams((location.hash.split("?")[1] || ""));
         UI.filterSheet(p);
